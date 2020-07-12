@@ -1,6 +1,6 @@
-import com.tzutalin.grpc.blobkeeper.BlobKeeperGrpc;
-import com.tzutalin.grpc.blobkeeper.PutRequest;
-import com.tzutalin.grpc.blobkeeper.PutResponse;
+import br.grpc.BlobKeeperGrpc;
+import br.grpc.PutRequest;
+import br.grpc.PutResponse;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
@@ -10,27 +10,26 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.logging.Logger;
 
-public class UploadFileServer {
-    private static final Logger logger = Logger.getLogger(UploadFileServer.class.getName());
-    private static final int PORT = 50051;
+public class ServidorJavaGRPC {
+    private static final Logger logger = Logger.getLogger(ServidorJavaGRPC.class.getName());
+    private static final int PORT = 666;
 
     private Server mServer;
 
     private void start() throws IOException {
-    /* The port on which the mServer should run UploadFileServer*/
 
         mServer = ServerBuilder.forPort(PORT)
-                .addService(new UploadFileServer.BlobKeeperImpl())
+                .addService(new ServidorJavaGRPC.BlobKeeperImpl())
                 .build()
                 .start();
-        logger.info("Server started, listening on " + PORT);
+        logger.info("*** SERVIDOR gRPC OUVINDO A PORTA *** " + PORT);
+        //Caso der Algum problema na JVM
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
             public void run() {
-                // Use stderr here since the logger may have been reset by its JVM shutdown hook.
-                System.err.println("*** shutting down gRPC mServer since JVM is shutting down");
-                UploadFileServer.this.stop();
-                System.err.println("*** mServer shut down");
+                System.err.println("*** JVM CAIU NO PROCESSO gRPC ***");
+                ServidorJavaGRPC.this.stop();
+                System.err.println("*** SERVIDOR CAIU ***");
             }
         });
     }
@@ -42,7 +41,7 @@ public class UploadFileServer {
     }
 
     /**
-     * Await termination on the main thread since the grpc library uses daemon threads.
+     * Espera a thread do grpc.
      */
     private void blockUntilShutdown() throws InterruptedException {
         if (mServer != null) {
@@ -51,10 +50,10 @@ public class UploadFileServer {
     }
 
     /**
-     * Main launches the mServer from the command line.
+     * Carrega o mServer do command line.
      */
     public static void main(String[] args) throws IOException, InterruptedException {
-        final UploadFileServer server = new UploadFileServer();
+        final ServidorJavaGRPC server = new ServidorJavaGRPC();
         server.start();
         server.blockUntilShutdown();
     }
@@ -71,19 +70,22 @@ public class UploadFileServer {
 
                 @Override
                 public void onNext(PutRequest request) {
-                    // Print count
-                    logger.info("onNext count: " + mmCount);
+                    // Print contador
+                    logger.info("PROXIMO ==> PARTE ==> : " + mmCount);
                     mmCount++;
 
                     byte[] data = request.getData().toByteArray();
                     long offset = request.getOffset();
+                    String path = "C:\\teste\\file.mkv"; //Onde vai buscar o Arquivo
+                    logger.info("CAMINHO DO ARQUIVO >>"+ path );
                     String name = request.getName();
+                    logger.info("NOME DO ARQUIVO >>"+ name );
                     try {
                         if (mBufferedOutputStream == null) {
-                            mBufferedOutputStream = new BufferedOutputStream(new FileOutputStream("receive_" + name));
+                            mBufferedOutputStream = new BufferedOutputStream(new FileOutputStream(path));
                         }
                         mBufferedOutputStream.write(data);
-                        mBufferedOutputStream.flush();
+                        mBufferedOutputStream.flush(); //Fecha depois do streaming
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

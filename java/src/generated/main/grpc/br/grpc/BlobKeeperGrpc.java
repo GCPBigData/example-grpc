@@ -1,18 +1,10 @@
-package com.tzutalin.grpc.blobkeeper;
+package br.grpc;
 
-import static io.grpc.stub.ClientCalls.asyncUnaryCall;
-import static io.grpc.stub.ClientCalls.asyncServerStreamingCall;
 import static io.grpc.stub.ClientCalls.asyncClientStreamingCall;
-import static io.grpc.stub.ClientCalls.asyncBidiStreamingCall;
 import static io.grpc.stub.ClientCalls.blockingUnaryCall;
 import static io.grpc.stub.ClientCalls.blockingServerStreamingCall;
-import static io.grpc.stub.ClientCalls.futureUnaryCall;
 import static io.grpc.MethodDescriptor.generateFullMethodName;
-import static io.grpc.stub.ServerCalls.asyncUnaryCall;
-import static io.grpc.stub.ServerCalls.asyncServerStreamingCall;
 import static io.grpc.stub.ServerCalls.asyncClientStreamingCall;
-import static io.grpc.stub.ServerCalls.asyncBidiStreamingCall;
-import static io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall;
 import static io.grpc.stub.ServerCalls.asyncUnimplementedStreamingCall;
 
 /**
@@ -28,14 +20,14 @@ public final class BlobKeeperGrpc {
 
   // Static method descriptors that strictly reflect the proto.
   @io.grpc.ExperimentalApi("https://github.com/grpc/grpc-java/issues/1901")
-  public static final io.grpc.MethodDescriptor<com.tzutalin.grpc.blobkeeper.PutRequest,
-      com.tzutalin.grpc.blobkeeper.PutResponse> METHOD_GET_BLOB =
+  public static final io.grpc.MethodDescriptor<PutRequest,
+          PutResponse> METHOD_GET_BLOB =
       io.grpc.MethodDescriptor.create(
           io.grpc.MethodDescriptor.MethodType.CLIENT_STREAMING,
           generateFullMethodName(
               "blobkeeper.BlobKeeper", "GetBlob"),
-          io.grpc.protobuf.ProtoUtils.marshaller(com.tzutalin.grpc.blobkeeper.PutRequest.getDefaultInstance()),
-          io.grpc.protobuf.ProtoUtils.marshaller(com.tzutalin.grpc.blobkeeper.PutResponse.getDefaultInstance()));
+          io.grpc.protobuf.ProtoUtils.marshaller(PutRequest.getDefaultInstance()),
+          io.grpc.protobuf.ProtoUtils.marshaller(PutResponse.getDefaultInstance()));
 
   /**
    * Creates a new async stub that supports all call types for the service
@@ -66,8 +58,8 @@ public final class BlobKeeperGrpc {
 
     /**
      */
-    public io.grpc.stub.StreamObserver<com.tzutalin.grpc.blobkeeper.PutRequest> getBlob(
-        io.grpc.stub.StreamObserver<com.tzutalin.grpc.blobkeeper.PutResponse> responseObserver) {
+    public io.grpc.stub.StreamObserver<PutRequest> getBlob(
+        io.grpc.stub.StreamObserver<PutResponse> responseObserver) {
       return asyncUnimplementedStreamingCall(METHOD_GET_BLOB, responseObserver);
     }
 
@@ -77,8 +69,8 @@ public final class BlobKeeperGrpc {
             METHOD_GET_BLOB,
             asyncClientStreamingCall(
               new MethodHandlers<
-                com.tzutalin.grpc.blobkeeper.PutRequest,
-                com.tzutalin.grpc.blobkeeper.PutResponse>(
+                      PutRequest,
+                      PutResponse>(
                   this, METHODID_GET_BLOB)))
           .build();
     }
@@ -104,8 +96,8 @@ public final class BlobKeeperGrpc {
 
     /**
      */
-    public io.grpc.stub.StreamObserver<com.tzutalin.grpc.blobkeeper.PutRequest> getBlob(
-        io.grpc.stub.StreamObserver<com.tzutalin.grpc.blobkeeper.PutResponse> responseObserver) {
+    public io.grpc.stub.StreamObserver<PutRequest> getBlob(
+        io.grpc.stub.StreamObserver<PutResponse> responseObserver) {
       return asyncClientStreamingCall(
           getChannel().newCall(METHOD_GET_BLOB, getCallOptions()), responseObserver);
     }
@@ -180,7 +172,7 @@ public final class BlobKeeperGrpc {
       switch (methodId) {
         case METHODID_GET_BLOB:
           return (io.grpc.stub.StreamObserver<Req>) serviceImpl.getBlob(
-              (io.grpc.stub.StreamObserver<com.tzutalin.grpc.blobkeeper.PutResponse>) responseObserver);
+              (io.grpc.stub.StreamObserver<PutResponse>) responseObserver);
         default:
           throw new AssertionError();
       }
@@ -190,7 +182,7 @@ public final class BlobKeeperGrpc {
   private static final class BlobKeeperDescriptorSupplier implements io.grpc.protobuf.ProtoFileDescriptorSupplier {
     @java.lang.Override
     public com.google.protobuf.Descriptors.FileDescriptor getFileDescriptor() {
-      return com.tzutalin.grpc.blobkeeper.blob.getDescriptor();
+      return blob.getDescriptor();
     }
   }
 
